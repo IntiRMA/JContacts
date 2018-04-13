@@ -31,7 +31,7 @@ public class SettingsManager
 
         try
         {
-            INSTALLATION_DIRECTORY = Paths.get(Application.class.getProtectionDomain().getCodeSource().getLocation()
+            INSTALLATION_DIRECTORY = Paths.get(SettingsManager.class.getProtectionDomain().getCodeSource().getLocation()
                     .toURI().getPath()).getParent().toString();
         }
         catch(URISyntaxException exc)
