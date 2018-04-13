@@ -1,14 +1,10 @@
 package org.tools.social.gui.util;
 
-import org.tools.social.Application;
 import org.tools.social.gui.SettingsScreen;
 
 import javax.swing.*;
 import java.io.*;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -18,7 +14,7 @@ public class SettingsManager
     private static final String DEFAULT_DB_FILE;
     private static final String CONFIG_FILE;
 
-    private static Path configPath;
+    private static File configPath;
     private static SettingsManager instance;
 
     private String popUpTitle;
@@ -31,8 +27,8 @@ public class SettingsManager
 
         try
         {
-            INSTALLATION_DIRECTORY = Paths.get(SettingsManager.class.getProtectionDomain().getCodeSource().getLocation()
-                    .toURI().getPath()).getParent().toString();
+            INSTALLATION_DIRECTORY = new File(SettingsManager.class.getProtectionDomain().getCodeSource().getLocation()
+                    .toURI().getPath()).getParent();
         }
         catch(URISyntaxException exc)
         {
@@ -50,16 +46,16 @@ public class SettingsManager
     {
         if(null == SettingsManager.instance)
         {
-            SettingsManager.configPath = Paths.get(SettingsManager.INSTALLATION_DIRECTORY + "/" +
+            SettingsManager.configPath = new File(SettingsManager.INSTALLATION_DIRECTORY + "/" +
                     SettingsManager.CONFIG_FILE);
 
-            if(false == Files.exists(configPath))
+            if(false == configPath.exists())
             {
                 JOptionPane.showMessageDialog(null,
                         LanguageManager.getInstance().getValue("config_not_found_msg"),
                         "Error", JOptionPane.ERROR_MESSAGE);
 
-                try(OutputStream output = new FileOutputStream(SettingsManager.configPath.toFile()))
+                try(OutputStream output = new FileOutputStream(SettingsManager.configPath))
                 {
                     Properties properties = new Properties();
 
@@ -91,7 +87,7 @@ public class SettingsManager
 
     public String getProperty(String name) throws IOException
     {
-        try(FileInputStream configFile = new FileInputStream(SettingsManager.configPath.toFile()))
+        try(FileInputStream configFile = new FileInputStream(SettingsManager.configPath))
         {
             Properties properties = new Properties();
             properties.load(configFile);
@@ -104,12 +100,12 @@ public class SettingsManager
     {
         Properties properties = new Properties();
 
-        try(FileInputStream configFileIn = new FileInputStream(SettingsManager.configPath.toFile()))
+        try(FileInputStream configFileIn = new FileInputStream(SettingsManager.configPath))
         {
             properties.load(configFileIn);
         }
 
-        try(OutputStream configFileOut = new FileOutputStream(SettingsManager.configPath.toFile()))
+        try(OutputStream configFileOut = new FileOutputStream(SettingsManager.configPath))
         {
             properties.setProperty(name, value);
             properties.store(configFileOut, null);
