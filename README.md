@@ -9,6 +9,10 @@ Originally this was an educational project. It was the intention of this project
 such as databases, to achieve the greatest possible studying success within one single application. Please note that this
 application is still in developing and should be used carefully.
 
+## Download
+
+You can download the latest version [here](https://github.com/0x1C1B/JContacts/releases).
+
 ## License
 
 Copyright (c) 2018 0x1C1B
