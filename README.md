@@ -1,6 +1,8 @@
 # JContacts
 > A simple Java based solution for the organization of contacts
 
+![alt text](https://github.com/0x1C1B/JContacts/blob/master/doc/img/preview.png)
+
 ## Overview
 
 Originally this was an educational project. It was the intention of this project to unite many different components,
