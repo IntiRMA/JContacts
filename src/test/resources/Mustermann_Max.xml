@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root>
+<contact>
+<prename>Max</prename>
+<surname>Mustermann</surname>
+<email>mustermann@provider.com</email>
+<phone>01234/56789</phone>
+<homepage>www.mustermann.com</homepage>
+<location>Germany</location>
+</contact>
+</root>
