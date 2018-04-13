@@ -74,6 +74,7 @@ public class SettingsScreen implements Screen, ChangeLanguageListener {
                     this.languageField.setSelectedItem("Français");
                     break;
                 }
+                case "en":
                 default: {
                     this.languageField.setSelectedItem("English");
                     break;
@@ -100,6 +101,7 @@ public class SettingsScreen implements Screen, ChangeLanguageListener {
             {
                 return Locale.FRENCH.toString();
             }
+            case "English":
             default:
             {
                 return Locale.ENGLISH.toString();
