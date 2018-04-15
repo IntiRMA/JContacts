@@ -24,7 +24,8 @@ public enum IconManager
     ICON_MENU("/icon/menu.png", 24, 24),
     ICON_EXPORT_CONTACT("/icon/export.png", 24, 24),
     ICON_IMPORT_CONTACT("/icon/import.png", 24, 24),
-    ICON_SETTINGS("/icon/settings.png", 24, 24);
+    ICON_SETTINGS("/icon/settings.png", 24, 24),
+    ICON_GITHUB("/icon/github.png", 24, 24);
 
     protected ImageIcon icon;
 

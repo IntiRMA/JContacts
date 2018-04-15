@@ -20,6 +20,9 @@ import org.tools.social.gui.event.*;
 import org.tools.social.util.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -60,6 +63,7 @@ public class MainScreen implements Screen, ChangeLanguageListener {
     private JButton exportContactBtn;
     private JLabel titleSloganLabel;
     private JButton infoBtn;
+    private JButton socialGitHubBtn;
 
     private ContactListModel<Contact> listModel;
     private java.util.List<SwitchEditScreenListener> switchEditScreenListeners = new ArrayList<>();
@@ -139,6 +143,11 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         this.exportContactBtn.setMargin(new Insets(0, 0, 0, 0));
         this.exportContactBtn.setIcon(IconManager.ICON_EXPORT_CONTACT.getIcon());
         this.exportContactBtn.addActionListener(new ExportContactActionListener());
+
+        this.socialGitHubBtn.setBorderPainted(false);
+        this.socialGitHubBtn.setMargin(new Insets(0, 0, 0, 0));
+        this.socialGitHubBtn.setIcon(IconManager.ICON_GITHUB.getIcon());
+        this.socialGitHubBtn.addActionListener(new BrowseGitHubRepositoryListener());
     }
 
     /**
@@ -384,11 +393,9 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         headerPanel = new JPanel();
         headerPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), 0, 0));
         rootPanel.add(headerPanel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(-1, 175), null, 0, false));
-        final Spacer spacer2 = new Spacer();
-        headerPanel.add(spacer2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridLayoutManager(2, 1, new Insets(0, 20, 0, 0), 0, 0));
-        headerPanel.add(panel4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        headerPanel.add(panel4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
         Font label1Font = this.$$$getFont$$$(null, -1, 36, label1.getFont());
         if (label1Font != null) label1.setFont(label1Font);
@@ -397,6 +404,16 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         titleSloganLabel = new JLabel();
         titleSloganLabel.setText("Easy management of contacts");
         panel4.add(titleSloganLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel5 = new JPanel();
+        panel5.setLayout(new GridLayoutManager(2, 1, new Insets(5, 0, 0, 0), -1, -1));
+        headerPanel.add(panel5, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        socialGitHubBtn = new JButton();
+        socialGitHubBtn.setBackground(new Color(-4539718));
+        socialGitHubBtn.setText("");
+        socialGitHubBtn.setToolTipText("GitHub");
+        panel5.add(socialGitHubBtn, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        panel5.add(spacer2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
     /**
@@ -521,6 +538,25 @@ public class MainScreen implements Screen, ChangeLanguageListener {
                         LanguageManager.getInstance().getValue("no_contact_selected_msg"),
                         "Warning", JOptionPane.WARNING_MESSAGE);
             }
+        }
+    }
+
+    private class BrowseGitHubRepositoryListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://github.com/0x1C1B/JContacts"));
+                } catch (IOException | URISyntaxException exc) {
+                    JOptionPane.showMessageDialog(null, exc,
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        LanguageManager.getInstance().getValue("no_browser_found_msg"),
+                        "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+
         }
     }
 }
