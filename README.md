@@ -9,9 +9,11 @@ Originally this was an educational project. It was the intention of this project
 such as databases, to achieve the greatest possible studying success within one single application. Please note that this
 application is still in developing and should be used carefully.
 
-## Download
+## Download & Installation
 
-You can download the latest version [here](https://github.com/0x1C1B/JContacts/releases).
+You can download the latest version as a zip file [here](https://github.com/0x1C1B/JContacts/releases).
+
+For installing this software extract the downloaded zip file and place the extracted folder in the install directory. It's possible to execute this software by launching the jar file in the root directory.
 
 ## License
 
