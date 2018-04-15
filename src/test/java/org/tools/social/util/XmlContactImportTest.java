@@ -19,11 +19,18 @@ public class XmlContactImportTest
                 "01234/56789", "www.mustermann.com", "Germany");
     }
 
-    @Test public void importContact() throws IOException, SAXException, ParserConfigurationException
+    @Test public void importContact() throws IOException, SAXException, ParserConfigurationException, ContactXmlFormatException
     {
         Contact importedContact = XmlContactImport.importContact(getClass().getClassLoader()
                 .getResource("Mustermann_Max.xml").toString());
 
         assertEquals(tempContact.equals(importedContact), true);
+    }
+
+    @Test(expected = ContactXmlFormatException.class) public void importDamagedContact()
+            throws IOException, SAXException, ParserConfigurationException, ContactXmlFormatException
+    {
+        Contact importedContact = XmlContactImport.importContact(getClass().getClassLoader()
+                .getResource("Mustermann_Max_damaged.xml").toString());
     }
 }

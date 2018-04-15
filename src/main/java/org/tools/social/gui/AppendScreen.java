@@ -412,6 +412,10 @@ public class AppendScreen implements Screen, ChangeLanguageListener {
 
                     emitAddContactAction(contact);
                     clearInputFields();
+                } catch (ContactXmlFormatException exc) {
+                    JOptionPane.showMessageDialog(null,
+                            LanguageManager.getInstance().getValue("invalid_contact_xml_format_msg"),
+                            "Error", JOptionPane.ERROR_MESSAGE);
                 } catch (ParserConfigurationException | IOException | SAXException exc) {
                     JOptionPane.showMessageDialog(null, exc,
                             "Error", JOptionPane.ERROR_MESSAGE);

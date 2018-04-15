@@ -21,7 +21,7 @@ public class XmlContactImport
     }
 
     public static Contact importContact(String path)
-            throws ParserConfigurationException, IOException, SAXException
+            throws ParserConfigurationException, IOException, SAXException, ContactXmlFormatException
     {
         DocumentBuilder builder = XmlContactImport.factory.newDocumentBuilder();
         Document document = builder.parse(path);
@@ -30,7 +30,7 @@ public class XmlContactImport
 
         if(0 >= nodeList.getLength())
         {
-            throw new IOException("No stored contact found!");
+            throw new ContactXmlFormatException("No stored contact found");
         }
 
         Contact contact = new Contact();
@@ -40,14 +40,26 @@ public class XmlContactImport
         {
             Element element = (Element) node;
 
-            contact.setPrename(element.getElementsByTagName("prename").item(0).getTextContent());
-            contact.setSurname(element.getElementsByTagName("surname").item(0).getTextContent());
-            contact.setEmailAddress(element.getElementsByTagName("email").item(0).getTextContent());
-            contact.setPhoneNumber(element.getElementsByTagName("phone").item(0).getTextContent());
-            contact.setHomepage(element.getElementsByTagName("homepage").item(0).getTextContent());
-            contact.setLocation(element.getElementsByTagName("location").item(0).getTextContent());
+            contact.setPrename(getContactElementsByTagName(element, "prename").item(0).getTextContent());
+            contact.setSurname(getContactElementsByTagName(element, "surname").item(0).getTextContent());
+            contact.setEmailAddress(getContactElementsByTagName(element, "email").item(0).getTextContent());
+            contact.setPhoneNumber(getContactElementsByTagName(element, "phone").item(0).getTextContent());
+            contact.setHomepage(getContactElementsByTagName(element, "homepage").item(0).getTextContent());
+            contact.setLocation(getContactElementsByTagName(element, "location").item(0).getTextContent());
         }
 
         return contact;
+    }
+
+    private static NodeList getContactElementsByTagName(Element element, String tag) throws ContactXmlFormatException
+    {
+        NodeList nodeList = element.getElementsByTagName(tag);
+
+        if(null == nodeList || 0 >= nodeList.getLength())
+        {
+            throw new ContactXmlFormatException("Element doesn't exist: " + tag);
+        }
+
+        return nodeList;
     }
 }
