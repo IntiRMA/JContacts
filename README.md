@@ -1,7 +1,15 @@
 # JContacts
 > A simple Java based solution for the organization of contacts
 
-![alt text](https://github.com/0x1C1B/JContacts/blob/master/doc/img/preview.png)
+## Table of Contents
+
+- [Overview](#overview)
+- [Download](#download)
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
+  - [Forbidden](#forbidden)
+  - [Third-party](#third-party)
 
 ## Overview
 
@@ -9,11 +17,31 @@ Originally this was an educational project. It was the intention of this project
 such as databases, to achieve the greatest possible studying success within one single application. Please note that this
 application is still in developing and should be used carefully.
 
-## Download & Installation
+In the current state, this application contains all basic features for managing contacts. The single contacts will stored in a local standalone database. Moreover, it's possible to store, edit, export and delete single contacts. In future versions there will be a search function, to extract single contacts from database by tags. Also, there will be multi language support, at the moment for english, french and german.
 
-You can download the latest version as a zip file [here](https://github.com/0x1C1B/JContacts/releases).
+![alt text](https://github.com/0x1C1B/JContacts/blob/master/doc/img/preview.png)
 
-For installing this software extract the downloaded zip file and place the extracted folder in the install directory. It's possible to execute this software by launching the jar file in the root directory.
+## Download
+
+You can download the latest version [here](https://github.com/0x1C1B/JContacts/releases).
+
+## Installation
+
+There is no need to install external dependencies, just extract the downloaded zip file to the installation directory.
+
+```sh
+$ sudo apt-get install unzip
+$ unzip JContacts-<version>.zip -d /path/to/installation/directory
+```
+
+## Usage
+
+The installation root directory contains a jar file like `JContacts-<version>.jar`. Execute this jar file for launching the
+application.
+
+```sh
+$ java -jar JContacts-<version>.jar
+```
 
 ## License
 
@@ -45,7 +73,7 @@ more details.
 **Hold Liable**: Software is provided without warranty and the software
 author/license owner cannot be held liable for damages.
 
-### Third-party sources
+### Third-party
 
 The icons, sounds, and photos used in this software are extracted from [Icons8](https://icons8.com/) and are published
 under the CC Attribution-NoDerivs 3.0 License.
