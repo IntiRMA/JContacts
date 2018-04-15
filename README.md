@@ -42,3 +42,11 @@ more details.
 
 **Hold Liable**: Software is provided without warranty and the software
 author/license owner cannot be held liable for damages.
+
+### Third-party sources
+
+The icons, sounds, and photos used in this software are extracted from [Icons8](https://icons8.com/) and are published
+under the CC Attribution-NoDerivs 3.0 License.
+
+[CC Attribution-NoDerivs 3.0 License](https://creativecommons.org/licenses/by-nd/3.0/) for
+more details.
