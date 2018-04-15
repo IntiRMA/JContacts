@@ -9,6 +9,10 @@ import java.util.ResourceBundle;
 
 public class LanguageManager
 {
+    public static final String ENGLISH;
+    public static final String FRENCH;
+    public static final String GERMAN;
+
     private static LanguageManager instance;
 
     private Locale currentLocale;
@@ -18,6 +22,10 @@ public class LanguageManager
     static
     {
         instance = new LanguageManager();
+
+        ENGLISH = "English";
+        GERMAN = "Deutsch";
+        FRENCH = "Français";
     }
 
     private LanguageManager()

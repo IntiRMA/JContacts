@@ -69,7 +69,7 @@ public class AppendScreen implements Screen, ChangeLanguageListener {
 
     public AppendScreen() {
         this.setupSideBarUI();
-        this.setupContactFormUI();
+        this.setupFormUI();
     }
 
     private void setupSideBarUI() {
@@ -92,7 +92,7 @@ public class AppendScreen implements Screen, ChangeLanguageListener {
         this.infoBtn.addActionListener(new OpenSettingsListener());
     }
 
-    private void setupContactFormUI() {
+    private void setupFormUI() {
         this.contactIcon.setIcon(IconManager.ICON_CONTACT.getIcon());
         this.emailIcon.setIcon(IconManager.ICON_EMAIL.getIcon());
         this.phoneIcon.setIcon(IconManager.ICON_PHONE.getIcon());

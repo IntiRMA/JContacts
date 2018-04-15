@@ -75,8 +75,8 @@ public class MainScreen implements Screen, ChangeLanguageListener {
 
     public MainScreen() {
         this.setupSideBarUI();
-        this.setupContactListUI();
-        this.setupContactFormUI();
+        this.setupListUI();
+        this.setupFormUI();
 
         try {
             Contact[] storedContacts = SqlContactDatabase.getInstance().readAllContacts();
@@ -98,12 +98,12 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         this.appendScreenBtn.setBorderPainted(false);
         this.appendScreenBtn.setMargin(new Insets(0, 0, 0, 0));
         this.appendScreenBtn.setIcon(IconManager.ICON_ADD_CONTACT.getIcon());
-        this.appendScreenBtn.addActionListener(new OnButtonAppendScreenClicked());
+        this.appendScreenBtn.addActionListener(new SwitchAppendScreenActionListener());
 
         this.editScreenBtn.setBorderPainted(false);
         this.editScreenBtn.setMargin(new Insets(0, 0, 0, 0));
         this.editScreenBtn.setIcon(IconManager.ICON_EDIT_CONTACT.getIcon());
-        this.editScreenBtn.addActionListener(new OnButtonEditScreenClicked());
+        this.editScreenBtn.addActionListener(new SwitchEditScreenActionListener());
 
         this.infoBtn.setBorderPainted(false);
         this.infoBtn.setMargin(new Insets(0, 0, 0, 0));
@@ -111,7 +111,7 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         this.infoBtn.addActionListener(new OpenSettingsListener());
     }
 
-    private void setupContactListUI() {
+    private void setupListUI() {
         this.listModel = new ContactListModel<Contact>();
         this.listPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE));
         this.listScrollPane.setBorder(null);
@@ -120,10 +120,10 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         this.contactList.setAutoscrolls(true);
         this.contactList.setCellRenderer(new ContactListCellRenderer());
         this.contactList.setFixedCellHeight(30);
-        contactList.addListSelectionListener(new OnContactListSelectionChanged());
+        contactList.addListSelectionListener(new ListSelectionChangedListener());
     }
 
-    private void setupContactFormUI() {
+    private void setupFormUI() {
         this.contactIconLabel.setIcon(IconManager.ICON_CONTACT.getIcon());
         this.phoneIconLabel.setIcon(IconManager.ICON_PHONE.getIcon());
         this.emailIconLabel.setIcon(IconManager.ICON_EMAIL.getIcon());
@@ -133,12 +133,12 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         this.deleteContactBtn.setBorderPainted(false);
         this.deleteContactBtn.setMargin(new Insets(0, 0, 0, 0));
         this.deleteContactBtn.setIcon(IconManager.ICON_DELETE_CONTACT.getIcon());
-        this.deleteContactBtn.addActionListener(new OnButtonDeleteContactClicked());
+        this.deleteContactBtn.addActionListener(new DeleteContactActionListener());
 
         this.exportContactBtn.setBorderPainted(false);
         this.exportContactBtn.setMargin(new Insets(0, 0, 0, 0));
         this.exportContactBtn.setIcon(IconManager.ICON_EXPORT_CONTACT.getIcon());
-        this.exportContactBtn.addActionListener(new OnButtonExportContactClicked());
+        this.exportContactBtn.addActionListener(new ExportContactActionListener());
     }
 
     /**
@@ -425,7 +425,7 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         return rootPanel;
     }
 
-    private class OnContactListSelectionChanged implements ListSelectionListener {
+    private class ListSelectionChangedListener implements ListSelectionListener {
         @Override
         public void valueChanged(ListSelectionEvent event) {
             JList list = (JList) event.getSource();
@@ -452,7 +452,7 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         }
     }
 
-    private class OnButtonExportContactClicked implements ActionListener {
+    private class ExportContactActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent event) {
             int index = contactList.getSelectedIndex();
@@ -479,14 +479,14 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         }
     }
 
-    private class OnButtonAppendScreenClicked implements ActionListener {
+    private class SwitchAppendScreenActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent event) {
             emitSwitchAppendScreenAction();
         }
     }
 
-    private class OnButtonEditScreenClicked implements ActionListener {
+    private class SwitchEditScreenActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent event) {
             int index = contactList.getSelectedIndex();
@@ -501,7 +501,7 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         }
     }
 
-    private class OnButtonDeleteContactClicked implements ActionListener {
+    private class DeleteContactActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent event) {
             int index = contactList.getSelectedIndex();

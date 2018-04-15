@@ -4,6 +4,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import org.tools.social.gui.event.ChangeLanguageListener;
+import org.tools.social.gui.util.IconManager;
 import org.tools.social.gui.util.LanguageManager;
 import org.tools.social.gui.util.Screen;
 import org.tools.social.gui.util.SettingsManager;
@@ -21,24 +22,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
-public class SettingsScreen implements Screen, ChangeLanguageListener {
+public class SettingsScreen implements Screen
+{
     private JPanel rootPanel;
     private JComboBox languageField;
     private JButton openBtn;
     private JTextField dbPathField;
 
-    public SettingsScreen()
-    {
-        this.openBtn.addActionListener(new ActionListener()
-        {
-            @Override public void actionPerformed(ActionEvent event)
-            {
+    public SettingsScreen() {
+        this.setupFormUI();
+
+        this.openBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
                 fileChooser.setFileFilter(new FileNameExtensionFilter("Database Files", "db"));
 
-                if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(null))
-                {
+                if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(null)) {
                     File selectedFile = fileChooser.getSelectedFile();
                     dbPathField.setText(selectedFile.getAbsolutePath());
                 }
@@ -55,28 +56,26 @@ public class SettingsScreen implements Screen, ChangeLanguageListener {
         return this.rootPanel;
     }
 
-    @Override
-    public void languageChanged(Locale locale) {
-
+    private void setupFormUI() {
+        this.dbPathField.setBorder(null);
     }
 
-    public void fillSettingsForm()
-    {
+    public void fillProperties() {
         try {
             String language = SettingsManager.getInstance().getProperty("language");
 
             switch (language) {
                 case "de": {
-                    this.languageField.setSelectedItem("Deutsch");
+                    this.languageField.setSelectedItem(LanguageManager.GERMAN);
                     break;
                 }
                 case "fr": {
-                    this.languageField.setSelectedItem("Français");
+                    this.languageField.setSelectedItem(LanguageManager.FRENCH);
                     break;
                 }
                 case "en":
                 default: {
-                    this.languageField.setSelectedItem("English");
+                    this.languageField.setSelectedItem(LanguageManager.ENGLISH);
                     break;
                 }
             }
@@ -87,30 +86,21 @@ public class SettingsScreen implements Screen, ChangeLanguageListener {
         }
     }
 
-    public String getSelectedLanguage()
-    {
+    public String getPropertyLanguage() {
         String language = (String) this.languageField.getSelectedItem();
 
-        switch (language)
-        {
-            case "Deutsch":
-            {
-                return Locale.GERMAN.toString();
-            }
-            case "Français":
-            {
-                return Locale.FRENCH.toString();
-            }
-            case "English":
-            default:
-            {
-                return Locale.ENGLISH.toString();
-            }
+        if (true == LanguageManager.GERMAN.equals(language)) {
+            return Locale.GERMAN.toString();
+        } else if (true == LanguageManager.FRENCH.equals(language)) {
+            return Locale.FRENCH.toString();
+        } else if (true == LanguageManager.ENGLISH.equals(language)) {
+            return Locale.ENGLISH.toString();
+        } else {
+            return Locale.ENGLISH.toString();
         }
     }
 
-    public String getSelectedDatabasePath()
-    {
+    public String getPropertyDatabasePath() {
         return this.dbPathField.getText();
     }
 
@@ -130,7 +120,7 @@ public class SettingsScreen implements Screen, ChangeLanguageListener {
      */
     private void $$$setupUI$$$() {
         rootPanel = new JPanel();
-        rootPanel.setLayout(new GridLayoutManager(3, 3, new Insets(5, 5, 5, 5), -1, 10));
+        rootPanel.setLayout(new GridLayoutManager(3, 3, new Insets(5, 5, 20, 5), -1, 10));
         languageField = new JComboBox();
         final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
         defaultComboBoxModel1.addElement("English");
@@ -155,7 +145,7 @@ public class SettingsScreen implements Screen, ChangeLanguageListener {
         rootPanel.add(label2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         dbPathField = new JTextField();
         dbPathField.setEditable(false);
-        rootPanel.add(dbPathField, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        rootPanel.add(dbPathField, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(400, -1), new Dimension(150, -1), null, 0, false));
     }
 
     /**
@@ -183,4 +173,19 @@ public class SettingsScreen implements Screen, ChangeLanguageListener {
     public JComponent $$$getRootComponent$$$() {
         return rootPanel;
     }
+
+    class ChangeDatabasePathListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Database Files", "db"));
+
+            if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(null)) {
+                File selectedFile = fileChooser.getSelectedFile();
+                dbPathField.setText(selectedFile.getAbsolutePath());
+            }
+        }
+    }
+
 }

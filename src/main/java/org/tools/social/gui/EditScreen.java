@@ -66,7 +66,7 @@ public class EditScreen implements Screen, ChangeLanguageListener {
 
     public EditScreen() {
         this.setupSideBarUI();
-        this.setupContactFormUI();
+        this.setupFormUI();
     }
 
     private void setupSideBarUI() {
@@ -89,7 +89,7 @@ public class EditScreen implements Screen, ChangeLanguageListener {
         this.infoBtn.addActionListener(new OpenSettingsListener());
     }
 
-    private void setupContactFormUI() {
+    private void setupFormUI() {
         this.contactIcon.setIcon(IconManager.ICON_CONTACT.getIcon());
         this.emailIcon.setIcon(IconManager.ICON_EMAIL.getIcon());
         this.phoneIcon.setIcon(IconManager.ICON_PHONE.getIcon());

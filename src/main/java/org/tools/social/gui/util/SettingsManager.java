@@ -18,7 +18,7 @@ public class SettingsManager
     private static SettingsManager instance;
 
     private String popUpTitle;
-    private SettingsScreen popUpScreen;
+    private SettingsScreen settingsScreen;
 
     static
     {
@@ -39,7 +39,7 @@ public class SettingsManager
     private SettingsManager(String title, SettingsScreen screen)
     {
         this.popUpTitle = title;
-        this.popUpScreen = screen;
+        this.settingsScreen = screen;
     }
 
     public static boolean initialize(String title, SettingsScreen screen)
@@ -114,16 +114,16 @@ public class SettingsManager
 
     public void showUI() throws IOException
     {
-        this.popUpScreen.fillSettingsForm();
+        this.settingsScreen.fillProperties();
 
-        int response = JOptionPane.showConfirmDialog(null, this.popUpScreen.getPanel(), this.popUpTitle,
+        int response = JOptionPane.showConfirmDialog(null, this.settingsScreen.getPanel(), this.popUpTitle,
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
         if(JOptionPane.OK_OPTION == response)
         {
-            this.setProperty("language", this.popUpScreen.getSelectedLanguage());
-            this.setProperty("db_path", this.popUpScreen.getSelectedDatabasePath());
+            this.setProperty("language", this.settingsScreen.getPropertyLanguage());
+            this.setProperty("db_path", this.settingsScreen.getPropertyDatabasePath());
 
             LanguageManager.getInstance().updateLocale(new Locale(this.getProperty("language")));
         }
