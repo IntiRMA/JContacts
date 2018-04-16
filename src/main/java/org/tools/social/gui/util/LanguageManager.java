@@ -97,7 +97,8 @@ public class LanguageManager
 
     public String getValue(String key)
     {
-        ResourceBundle bundle = ResourceBundle.getBundle("locale.JContacts", this.currentLocale);
+        ResourceBundle bundle = ResourceBundle.getBundle("locale.JContacts", this.currentLocale,
+                ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_DEFAULT));
 
         return bundle.getString(key);
     }
