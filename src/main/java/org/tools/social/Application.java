@@ -3,11 +3,8 @@ package org.tools.social;
 import javax.swing.*;
 import java.awt.*;
 
-import org.tools.social.gui.SettingsScreen;
+import org.tools.social.gui.*;
 import org.tools.social.gui.event.*;
-import org.tools.social.gui.MainScreen;
-import org.tools.social.gui.EditScreen;
-import org.tools.social.gui.AppendScreen;
 
 import org.tools.social.gui.event.handler.MoveWindowListener;
 import org.tools.social.gui.util.LanguageManager;
@@ -73,25 +70,34 @@ public class Application
 
     private void setupDatabase() throws IOException
     {
-        Path configDatabasePath = Paths.get(SettingsManager.getInstance().getProperty("db_path"));
-        String configDatabaseTable = SettingsManager.getInstance().getProperty("db_table");
+        while(true)
+        {
+            Path configDatabasePath = Paths.get(SettingsManager.getInstance().getProperty("db_path"));
+            String configDatabaseTable = SettingsManager.getInstance().getProperty("db_table");
 
-        try
-        {
-            SqlContactDatabase.initialize(configDatabasePath.toString(), configDatabaseTable);
-        }
-        catch(FileNotFoundException exc)
-        {
-            JOptionPane.showMessageDialog(null,
-                    LanguageManager.getInstance().getValue("db_not_found_msg"),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            try
+            {
+                SqlContactDatabase.initialize(configDatabasePath.toString(), configDatabaseTable);
+                break;
+            }
+            catch (FileNotFoundException exc) {
+                InitializeScreen initializeScreen = new InitializeScreen();
+                initializeScreen.fillProperties();
 
-            throw new InternalError(LanguageManager.getInstance().getValue("db_not_found_msg"));
-        }
-        catch(ClassNotFoundException | SQLException exc)
-        {
-            JOptionPane.showMessageDialog(null, exc, "Error", JOptionPane.ERROR_MESSAGE);
-            throw new InternalError(exc);
+                int response = JOptionPane.showConfirmDialog(null, initializeScreen.getPanel(),
+                        "Initialize",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE);
+
+                if (JOptionPane.OK_OPTION == response) {
+                    SettingsManager.getInstance().setProperty("db_path", initializeScreen.getPropertyDatabasePath());
+                } else {
+                    throw new InternalError(LanguageManager.getInstance().getValue("db_not_found_msg"));
+                }
+            } catch (ClassNotFoundException | SQLException exc) {
+                JOptionPane.showMessageDialog(null, exc, "Error", JOptionPane.ERROR_MESSAGE);
+                throw new InternalError(exc);
+            }
         }
     }
 

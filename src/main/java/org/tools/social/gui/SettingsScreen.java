@@ -28,22 +28,9 @@ public class SettingsScreen implements Screen {
     private JButton openBtn;
     private JTextField dbPathField;
 
-    public SettingsScreen() {
+    public SettingsScreen()
+    {
         this.setupFormUI();
-
-        this.openBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-                fileChooser.setFileFilter(new FileNameExtensionFilter("Database Files", "db"));
-
-                if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(null)) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    dbPathField.setText(selectedFile.getAbsolutePath());
-                }
-            }
-        });
     }
 
     /**
@@ -55,8 +42,10 @@ public class SettingsScreen implements Screen {
         return this.rootPanel;
     }
 
-    private void setupFormUI() {
+    private void setupFormUI()
+    {
         this.dbPathField.setBorder(null);
+        this.openBtn.addActionListener(new ChangeDatabasePathListener());
     }
 
     public void fillProperties() {
