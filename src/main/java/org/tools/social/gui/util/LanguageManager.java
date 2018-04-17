@@ -62,7 +62,7 @@ public class LanguageManager
             listener.languageChanged(locale);
         }
     }
-    public void updateLocale()
+    public void refreshLocale()
     {
         this.updateLocale(this.currentLocale);
     }

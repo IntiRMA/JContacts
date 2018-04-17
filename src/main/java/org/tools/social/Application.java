@@ -75,6 +75,8 @@ public class Application extends JFrame
             this.initAppendScreen();
             this.initEditScreen();
 
+            this.initLanguage();
+
             this.setContentPane(this.mainScreen.getPanel());
             this.setVisible(true);
         }
@@ -92,6 +94,15 @@ public class Application extends JFrame
 
         Locale configLocale = new Locale(SettingsManager.getInstance().getProperty("language"));
         LanguageManager.getInstance().updateLocale(configLocale);
+    }
+
+    private void initLanguage()
+    {
+        LanguageManager.getInstance().addListener(this.mainScreen);
+        LanguageManager.getInstance().addListener(this.appendScreen);
+        LanguageManager.getInstance().addListener(this.editScreen);
+
+        LanguageManager.getInstance().refreshLocale();
     }
 
     private void initDatabase() throws IOException, ClassNotFoundException, SQLException
