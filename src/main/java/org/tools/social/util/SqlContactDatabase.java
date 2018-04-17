@@ -31,28 +31,26 @@ public class SqlContactDatabase implements AutoCloseable
         DATABASE_DRIVER = "org.sqlite.JDBC";
     }
 
-    private SqlContactDatabase(String path, String table) throws ClassNotFoundException, SQLException
+    private SqlContactDatabase(File file, String table) throws ClassNotFoundException, SQLException
     {
-        this.DATABASE_PATH = path;
+        this.DATABASE_PATH = file.getAbsolutePath();
         this.TABLE_NAME = table;
 
         Class.forName(SqlContactDatabase.DATABASE_DRIVER);
         this.connection = DriverManager.getConnection("jdbc:sqlite:" + this.DATABASE_PATH);
     }
 
-    public static boolean initialize(String path, String table)
+    public static boolean initialize(File file, String table)
             throws ClassNotFoundException, SQLException, FileNotFoundException
     {
         if(null == SqlContactDatabase.instance)
         {
-            File file = new File(path);
-
             if(!file.exists() || file.isDirectory())
             {
-                throw new FileNotFoundException(path);
+                throw new FileNotFoundException(file.getAbsolutePath());
             }
 
-            SqlContactDatabase.instance = new SqlContactDatabase(path, table);
+            SqlContactDatabase.instance = new SqlContactDatabase(file, table);
 
             return true;
         }

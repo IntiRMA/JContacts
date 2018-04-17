@@ -444,13 +444,11 @@ public class AppendScreen implements Screen, ChangeLanguageListener {
                         "Invalid input", JOptionPane.WARNING_MESSAGE);
             } else {
                 if (false == new EmailValidator().validate(emailAddress) ||
-                        false == new HomepageValidator().validate(homepage))
-                {
+                        false == new HomepageValidator().validate(homepage)) {
                     JOptionPane.showMessageDialog(null,
                             LanguageManager.getInstance().getValue("invalid_format_msg"),
                             "Invalid input", JOptionPane.WARNING_MESSAGE);
-                }
-                else {
+                } else {
                     Contact contact = new Contact(prename, surname, emailAddress,
                             phoneNumber, homepage, location);
 

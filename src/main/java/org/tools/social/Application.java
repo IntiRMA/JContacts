@@ -31,113 +31,114 @@ import java.util.Properties;
  * @since 2018-03-22
  */
 
-public class Application
+public class Application extends JFrame
 {
-    private JFrame frame;
     private MainScreen mainScreen;
     private AppendScreen appendScreen;
     private EditScreen editScreen;
 
-    Application()
+    public static final Dimension DEFAULT_SIZE;
+
+    static
+    {
+        DEFAULT_SIZE = new Dimension(920, 580);
+    }
+
+    public Application()
+    {
+        try
+        {
+            MoveWindowListener moveWindowListener = new MoveWindowListener(this);
+            this.addMouseListener(moveWindowListener);
+            this.addMouseMotionListener(moveWindowListener);
+
+            this.addWindowListener(new java.awt.event.WindowAdapter()
+            {
+                @Override public void windowClosing(java.awt.event.WindowEvent event)
+                {
+                    Application.this.confirmQuitDialog();
+                }
+            });
+
+            this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            this.setMinimumSize(Application.DEFAULT_SIZE);
+            this.setResizable(false);
+
+            this.initPreferences();
+            this.initDatabase();
+
+            this.mainScreen = new MainScreen();
+            this.appendScreen = new AppendScreen();
+            this.editScreen = new EditScreen();
+
+            this.initMainScreen();
+            this.initAppendScreen();
+            this.initEditScreen();
+
+            this.setContentPane(this.mainScreen.getPanel());
+            this.setVisible(true);
+        }
+        catch(Exception exc)
+        {
+            JOptionPane.showMessageDialog(null, exc,
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+    }
+
+    private void initPreferences() throws IOException
     {
         SettingsManager.initialize("Settings", new SettingsScreen());
 
-        try
-        {
-            this.setupLanguage();
-            this.setupDatabase();
-        }
-        catch(IOException exc)
-        {
-            throw new InternalError(exc);
-        }
-
-        this.setupMainScreenUI();
-        this.setupAppendScreenUI();
-        this.setupEditScreenUI();
-        this.setupFrameUI();
-
-        LanguageManager.getInstance().addListener(this.mainScreen);
-        LanguageManager.getInstance().addListener(this.appendScreen);
-        LanguageManager.getInstance().addListener(this.editScreen);
-        LanguageManager.getInstance().updateLocale();
-    }
-
-    private void setupLanguage() throws IOException
-    {
         Locale configLocale = new Locale(SettingsManager.getInstance().getProperty("language"));
         LanguageManager.getInstance().updateLocale(configLocale);
     }
 
-    private void setupDatabase() throws IOException
+    private void initDatabase() throws IOException, ClassNotFoundException, SQLException
     {
-        while(true)
+        File file = new File(SettingsManager.getInstance().getProperty("db_path"));
+
+        if(!file.exists() || file.isDirectory())
         {
-            Path configDatabasePath = Paths.get(SettingsManager.getInstance().getProperty("db_path"));
-            String configDatabaseTable = SettingsManager.getInstance().getProperty("db_table");
-
-            try
+            if(JOptionPane.OK_OPTION != this.setDatabasePathDialog())
             {
-                SqlContactDatabase.initialize(configDatabasePath.toString(), configDatabaseTable);
-                break;
-            }
-            catch (FileNotFoundException exc) {
-                InitializeScreen initializeScreen = new InitializeScreen();
-                initializeScreen.fillProperties();
-
-                int response = JOptionPane.showConfirmDialog(null, initializeScreen.getPanel(),
-                        "Initialize",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE);
-
-                if (JOptionPane.OK_OPTION == response) {
-                    SettingsManager.getInstance().setProperty("db_path", initializeScreen.getPropertyDatabasePath());
-                } else {
-                    throw new InternalError(LanguageManager.getInstance().getValue("db_not_found_msg"));
-                }
-            } catch (ClassNotFoundException | SQLException exc) {
-                JOptionPane.showMessageDialog(null, exc, "Error", JOptionPane.ERROR_MESSAGE);
-                throw new InternalError(exc);
+                throw new IOException(LanguageManager.getInstance().getValue("db_not_found_msg"));
             }
         }
+
+        File databaseFile = new File(SettingsManager.getInstance().getProperty("db_path"));
+        String databaseTable = SettingsManager.getInstance().getProperty("db_table");
+
+        SqlContactDatabase.initialize(databaseFile, databaseTable);
     }
 
-    private void setupFrameUI()
+    private int setDatabasePathDialog() throws IOException
     {
-        this.frame = new JFrame();
+        InitializeScreen initializeScreen = new InitializeScreen();
+        initializeScreen.fillProperties();
 
-        MoveWindowListener moveWindowListener = new MoveWindowListener(frame);
-        frame.addMouseListener(moveWindowListener);
-        frame.addMouseMotionListener(moveWindowListener);
+        int response = JOptionPane.showConfirmDialog(null, initializeScreen.getPanel(),
+                "Initialize", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-        frame.addWindowListener(new java.awt.event.WindowAdapter()
+        if(JOptionPane.OK_OPTION == response)
         {
-            @Override public void windowClosing(java.awt.event.WindowEvent event)
-            {
-                quitDialog();
-            }
-        });
+            SettingsManager.getInstance().setProperty("db_path", initializeScreen.getPropertyDatabasePath());
+        }
 
-        this.frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.frame.setContentPane(this.mainScreen.getPanel());
-        this.frame.setMinimumSize(new Dimension(920, 580));
-        this.frame.setResizable(false);
-        this.frame.setVisible(true);
-        this.frame.pack();
+        return response;
     }
 
-    private void setupMainScreenUI()
+    private void initMainScreen()
     {
-        this.mainScreen = new MainScreen();
-
         this.mainScreen.addListener(new SwitchAppendScreenListener()
         {
             public void switchAppendScreenPerformed()
             {
-                appendScreen.clearInputFields();
-                frame.setContentPane(appendScreen.getPanel());
-                frame.pack();
-                frame.repaint();
+                Application.this.appendScreen.clearInputFields();
+
+                Application.this.setContentPane(Application.this.appendScreen.getPanel());
+                Application.this.pack();
+                Application.this.repaint();
             }
         });
 
@@ -145,26 +146,26 @@ public class Application
         {
             public void switchEditScreenPerformed(Contact contact)
             {
-                editScreen.fillContactForm(contact);
-                frame.setContentPane(editScreen.getPanel());
-                frame.pack();
-                frame.repaint();
+                Application.this.editScreen.fillContactForm(contact);
+
+                Application.this.setContentPane(Application.this.editScreen.getPanel());
+                Application.this.pack();
+                Application.this.repaint();
             }
         });
     }
 
-    private void setupAppendScreenUI()
+    private void initAppendScreen()
     {
-        this.appendScreen = new AppendScreen();
-
         this.appendScreen.addListener(new SwitchMainScreenListener()
         {
             public void switchMainScreenPerformed()
             {
-                appendScreen.clearInputFields();
-                frame.setContentPane(mainScreen.getPanel());
-                frame.pack();
-                frame.repaint();
+                Application.this.appendScreen.clearInputFields();
+
+                Application.this.setContentPane(mainScreen.getPanel());
+                Application.this.pack();
+                Application.this.repaint();
             }
         });
 
@@ -175,7 +176,7 @@ public class Application
                 try
                 {
                     SqlContactDatabase.getInstance().writeContact(contact);
-                    mainScreen.addContactToList(contact);
+                    Application.this.mainScreen.addContactToList(contact);
                 }
                 catch(FileNotFoundException | SQLException exc)
                 {
@@ -186,17 +187,15 @@ public class Application
         });
     }
 
-    private void setupEditScreenUI()
+    private void initEditScreen()
     {
-        this.editScreen = new EditScreen();
-
         this.editScreen.addListener(new SwitchMainScreenListener()
         {
             @Override public void switchMainScreenPerformed()
             {
-                frame.setContentPane(mainScreen.getPanel());
-                frame.pack();
-                frame.repaint();
+                Application.this.setContentPane(mainScreen.getPanel());
+                Application.this.pack();
+                Application.this.repaint();
             }
         });
 
@@ -207,7 +206,7 @@ public class Application
                 try
                 {
                     SqlContactDatabase.getInstance().updateContact(contact);
-                    mainScreen.replaceContactAtList(contact);
+                    Application.this.mainScreen.replaceContactAtList(contact);
                 }
                 catch(FileNotFoundException | SQLException exc)
                 {
@@ -218,7 +217,7 @@ public class Application
         });
     }
 
-    public void quitDialog()
+    public void confirmQuitDialog()
     {
         int response = JOptionPane.showConfirmDialog(null,
                 LanguageManager.getInstance().getValue("quit_application_msg"),
@@ -241,7 +240,7 @@ public class Application
             throw new InternalError(exc);
         }
 
-        this.frame.dispose();
+        this.dispose();
         System.exit(0);
     }
 
@@ -252,8 +251,14 @@ public class Application
      * @param args Unused.
      */
 
-    public static void main(String [] args) throws IOException, URISyntaxException
+    public static void main(String [] args)
     {
-        new Application();
+        SwingUtilities.invokeLater(new Runnable()
+        {
+            @Override public void run()
+            {
+                new Application();
+            }
+        });
     }
 }
