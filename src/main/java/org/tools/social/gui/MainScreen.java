@@ -27,6 +27,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,6 +69,8 @@ public class MainScreen implements Screen, ChangeLanguageListener {
     private JLabel titleSloganLabel;
     private JButton infoBtn;
     private JButton socialGitHubBtn;
+    private JTextField searchField;
+    private JButton searchBtn;
 
     private final String EMPTY_FIELD;
     private ContactListModel<Contact> listModel;
@@ -134,6 +137,26 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         this.contactList.setCellRenderer(new ContactListCellRenderer());
         this.contactList.setFixedCellHeight(30);
         contactList.addListSelectionListener(new ListSelectionChangedListener());
+
+        searchBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                Contact contact = new Contact("", searchField.getText(), "",
+                        "", "", "");
+
+                Collections.sort(listModel.getList(), Contact.COMPARE_BY_SURNAME);
+                listModel.fireDataChanged();
+                int foundIndex = Collections.binarySearch(listModel.getList(), contact, Contact.COMPARE_BY_SURNAME);
+
+                if (0 <= foundIndex) {
+                    contactList.setSelectedIndex(foundIndex);
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            LanguageManager.getInstance().getValue("contact_not_found_msg"),
+                            "Information", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
     }
 
     private void setupFormUI() {
@@ -235,6 +258,9 @@ public class MainScreen implements Screen, ChangeLanguageListener {
 
         this.deleteContactBtn.setToolTipText(LanguageManager.getInstance().getValue("tooltip_delete_contact_btn"));
         this.exportContactBtn.setToolTipText(LanguageManager.getInstance().getValue("tooltip_export_contact_btn"));
+
+        this.searchField.setToolTipText(LanguageManager.getInstance().getValue("tooltip_search_field"));
+        this.searchBtn.setText(LanguageManager.getInstance().getValue("text_search_btn"));
     }
 
     /**
@@ -362,11 +388,11 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         bodyPanel.setBackground(new Color(-12291125));
         rootPanel.add(bodyPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         listPanel = new JPanel();
-        listPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), 0, 0));
+        listPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), 0, 0));
         listPanel.setBackground(new Color(-14667942));
         bodyPanel.add(listPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         listScrollPane = new JScrollPane();
-        listPanel.add(listScrollPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(200, -1), new Dimension(250, -1), null, 0, false));
+        listPanel.add(listScrollPane, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(200, -1), new Dimension(250, -1), null, 0, false));
         contactList = new JList();
         contactList.setBackground(new Color(-12291125));
         Font contactListFont = this.$$$getFont$$$(null, Font.BOLD, -1, contactList.getFont());
@@ -377,6 +403,11 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         contactList.setSelectionBackground(new Color(-13741683));
         contactList.setSelectionMode(0);
         listScrollPane.setViewportView(contactList);
+        searchField = new JTextField();
+        listPanel.add(searchField, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        searchBtn = new JButton();
+        searchBtn.setText("");
+        listPanel.add(searchBtn, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(1, 1, new Insets(20, 20, 20, 20), 20, 20));
         panel1.setBackground(new Color(-12291125));

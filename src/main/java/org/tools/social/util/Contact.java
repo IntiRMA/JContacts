@@ -171,4 +171,30 @@ public class Contact implements Comparable <Contact>
         return "Contact {" + prename + ", " + surname + ", " + emailAddress +
                 ", " + phoneNumber + ", " + homepage + ", " + location + "}";
     }
+
+    public static Comparator <Contact> COMPARE_BY_PRENAME = new Comparator<Contact>()
+    {
+        @Override public int compare(Contact first, Contact second)
+        {
+            return first.prename.compareTo(second.prename);
+        }
+    };
+
+    public static Comparator <Contact> COMPARE_BY_SURNAME = new Comparator<Contact>()
+    {
+        @Override public int compare(Contact first, Contact second)
+        {
+            return first.surname.compareTo(second.surname);
+        }
+    };
+
+    public static Comparator <Contact> COMPARE_BY_NAME = new Comparator<Contact>()
+    {
+        @Override public int compare(Contact first, Contact second)
+        {
+            return Comparator.comparing(Contact::getPrename)
+                    .thenComparing(Contact::getSurname)
+                    .compare(first, second);
+        }
+    };
 }

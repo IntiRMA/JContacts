@@ -54,4 +54,9 @@ public class ContactListModel <T extends Contact> extends AbstractListModel <T>
     {
         return this.list.contains(object);
     }
+
+    public java.util.List <T> getList()
+    {
+        return this.list;
+    }
 }
