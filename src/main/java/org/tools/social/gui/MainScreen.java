@@ -19,6 +19,8 @@ import org.tools.social.gui.util.*;
 import org.tools.social.gui.event.*;
 import org.tools.social.util.*;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
@@ -26,6 +28,8 @@ import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The MainScreen class implements the central screen
@@ -65,9 +69,10 @@ public class MainScreen implements Screen, ChangeLanguageListener {
     private JButton infoBtn;
     private JButton socialGitHubBtn;
 
+    private final String EMPTY_FIELD;
     private ContactListModel<Contact> listModel;
-    private java.util.List<SwitchEditScreenListener> switchEditScreenListeners = new ArrayList<>();
-    private java.util.List<SwitchAppendScreenListener> switchAppendScreenListeners = new ArrayList<>();
+    private java.util.List<SwitchEditScreenListener> switchEditScreenListeners;
+    private java.util.List<SwitchAppendScreenListener> switchAppendScreenListeners;
 
     /**
      * The constructor reads all stored contacts from database and add them
@@ -78,6 +83,10 @@ public class MainScreen implements Screen, ChangeLanguageListener {
      */
 
     public MainScreen() {
+        this.EMPTY_FIELD = "-";
+        this.switchEditScreenListeners = new ArrayList<>();
+        this.switchAppendScreenListeners = new ArrayList<>();
+
         this.setupSideBarUI();
         this.setupListUI();
         this.setupFormUI();
@@ -148,6 +157,59 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         this.socialGitHubBtn.setMargin(new Insets(0, 0, 0, 0));
         this.socialGitHubBtn.setIcon(IconManager.ICON_GITHUB.getIcon());
         this.socialGitHubBtn.addActionListener(new BrowseGitHubRepositoryListener());
+
+        emailLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent event) {
+                if (false == emailLabel.getText().equals(EMPTY_FIELD)) {
+                    if (true == Desktop.isDesktopSupported()) {
+                        try {
+                            Pattern pattern = Pattern.compile("[\\w|-]+@\\w[\\w|-]*\\.[a-z]{2,3}");
+                            Matcher matcher = pattern.matcher(emailLabel.getText());
+
+                            matcher.find();
+                            String email = matcher.group(0);
+
+                            Desktop.getDesktop().mail(new URI("mailto:" + email));
+                        } catch (URISyntaxException | IOException exc) {
+                            JOptionPane.showMessageDialog(null, exc,
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                LanguageManager.getInstance().getValue("no_email_client_found_msg"),
+                                "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }
+        });
+
+        homepageLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent event) {
+                if (false == homepageLabel.getText().equals(EMPTY_FIELD)) {
+                    if (true == Desktop.isDesktopSupported()) {
+                        try {
+                            Pattern pattern = Pattern.compile("[a-z]{3}\\.[\\w|-]\\w[\\w|-]*\\.[a-z]{2,3}");
+                            Matcher matcher = pattern.matcher(homepageLabel.getText());
+
+                            matcher.find();
+                            String url = matcher.group(0);
+
+                            System.out.println(url);
+                            Desktop.getDesktop().browse(new URI("https://" + url));
+                        } catch (URISyntaxException | IOException exc) {
+                            JOptionPane.showMessageDialog(null, exc,
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                LanguageManager.getInstance().getValue("no_browser_found_msg"),
+                                "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -447,7 +509,6 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         public void valueChanged(ListSelectionEvent event) {
             JList list = (JList) event.getSource();
             int index = list.getSelectedIndex();
-            final String EMPTY_FIELD = "-";
 
             if (index >= list.getModel().getSize() || 0 > index) {
                 prenameLabel.setText(EMPTY_FIELD);
@@ -462,8 +523,8 @@ public class MainScreen implements Screen, ChangeLanguageListener {
                 prenameLabel.setText(contact.getPrename());
                 surnameLabel.setText(contact.getSurname());
                 phoneLabel.setText(contact.getPhoneNumber());
-                emailLabel.setText(contact.getEmailAddress());
-                homepageLabel.setText(contact.getHomepage());
+                emailLabel.setText("<html><a href=\"\">" + contact.getEmailAddress() + "</a></html>");
+                homepageLabel.setText("<html><a href=\"\">" + contact.getHomepage() + "</a></html>");
                 locationLabel.setText(contact.getLocation());
             }
         }

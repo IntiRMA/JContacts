@@ -13,6 +13,7 @@ import org.tools.social.util.Contact;
 import org.tools.social.util.SqlContactDatabase;
 
 import java.io.*;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -241,6 +242,7 @@ public class Application
         }
 
         this.frame.dispose();
+        System.exit(0);
     }
 
     /**
@@ -250,7 +252,7 @@ public class Application
      * @param args Unused.
      */
 
-    public static void main(String [] args) throws IOException
+    public static void main(String [] args) throws IOException, URISyntaxException
     {
         new Application();
     }
