@@ -3,7 +3,7 @@ package org.tools.social.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HomepageValidator
+public class UrlValidator
 {
     private Pattern pattern;
     private Matcher matcher;
@@ -12,10 +12,10 @@ public class HomepageValidator
 
     static
     {
-        HOMEPAGE_PATTERN = "[a-z]{3}\\.[\\w|-]\\w[\\w|-]*\\.[a-z]{2,3}";
+        HOMEPAGE_PATTERN = "(http://|https://)?[a-z]{3}\\.[\\w|-]\\w[\\w|-]*\\.[a-z]{2,3}";
     }
 
-    public HomepageValidator()
+    public UrlValidator()
     {
         pattern = Pattern.compile(HOMEPAGE_PATTERN);
     }
