@@ -196,7 +196,6 @@ public class MainScreen implements Screen, ChangeLanguageListener {
                             matcher.find();
                             String url = matcher.group(0);
 
-                            System.out.println(url);
                             Desktop.getDesktop().browse(new URI("https://" + url));
                         } catch (URISyntaxException | IOException exc) {
                             JOptionPane.showMessageDialog(null, exc,
