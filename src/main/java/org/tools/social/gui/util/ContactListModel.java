@@ -50,6 +50,19 @@ public class ContactListModel <T extends Contact> extends AbstractListModel <T>
         return element;
     }
 
+    public T removeElement(T object)
+    {
+        for(int index = 0; index < this.list.size(); ++index)
+        {
+            if(true == list.get(index).equals(object))
+            {
+                return this.removeElementAt(index);
+            }
+        }
+
+        return null;
+    }
+
     public boolean contains(T object)
     {
         return this.list.contains(object);

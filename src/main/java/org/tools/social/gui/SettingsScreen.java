@@ -28,8 +28,7 @@ public class SettingsScreen implements Screen {
     private JButton openBtn;
     private JTextField dbPathField;
 
-    public SettingsScreen()
-    {
+    public SettingsScreen() {
         this.setupFormUI();
     }
 
@@ -42,8 +41,7 @@ public class SettingsScreen implements Screen {
         return this.rootPanel;
     }
 
-    private void setupFormUI()
-    {
+    private void setupFormUI() {
         this.dbPathField.setBorder(null);
         this.openBtn.addActionListener(new ChangeDatabasePathListener());
     }
@@ -108,7 +106,7 @@ public class SettingsScreen implements Screen {
      */
     private void $$$setupUI$$$() {
         rootPanel = new JPanel();
-        rootPanel.setLayout(new GridLayoutManager(4, 3, new Insets(5, 5, 20, 5), -1, 10));
+        rootPanel.setLayout(new GridLayoutManager(3, 3, new Insets(5, 5, 20, 5), -1, 10));
         languageField = new JComboBox();
         final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
         defaultComboBoxModel1.addElement("English");
@@ -117,7 +115,7 @@ public class SettingsScreen implements Screen {
         languageField.setModel(defaultComboBoxModel1);
         rootPanel.add(languageField, new GridConstraints(0, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        rootPanel.add(spacer1, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        rootPanel.add(spacer1, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         openBtn = new JButton();
         openBtn.setText("Open");
         rootPanel.add(openBtn, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -134,12 +132,6 @@ public class SettingsScreen implements Screen {
         dbPathField = new JTextField();
         dbPathField.setEditable(false);
         rootPanel.add(dbPathField, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(400, -1), new Dimension(150, -1), null, 0, false));
-        final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(1, 1, new Insets(2, 0, 2, 0), -1, -1));
-        rootPanel.add(panel1, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JLabel label3 = new JLabel();
-        label3.setText("v0.0.3-beta");
-        panel1.add(label3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

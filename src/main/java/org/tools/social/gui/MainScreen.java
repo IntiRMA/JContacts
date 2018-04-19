@@ -1,6 +1,8 @@
 package org.tools.social.gui;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.xml.parsers.ParserConfigurationException;
@@ -138,23 +140,25 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         this.contactList.setFixedCellHeight(30);
         contactList.addListSelectionListener(new ListSelectionChangedListener());
 
-        searchBtn.addActionListener(new ActionListener() {
+        this.searchField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void actionPerformed(ActionEvent event) {
-                Contact contact = new Contact("", searchField.getText(), "",
-                        "", "", "");
+            public void insertUpdate(DocumentEvent event) {
+                filter();
+            }
 
-                Collections.sort(listModel.getList(), Contact.COMPARE_BY_SURNAME);
-                listModel.fireDataChanged();
-                int foundIndex = Collections.binarySearch(listModel.getList(), contact, Contact.COMPARE_BY_SURNAME);
+            @Override
+            public void removeUpdate(DocumentEvent event) {
+                filter();
+            }
 
-                if (0 <= foundIndex) {
-                    contactList.setSelectedIndex(foundIndex);
-                } else {
-                    JOptionPane.showMessageDialog(null,
-                            LanguageManager.getInstance().getValue("contact_not_found_msg"),
-                            "Information", JOptionPane.INFORMATION_MESSAGE);
-                }
+            @Override
+            public void changedUpdate(DocumentEvent event) {
+            }
+
+            private void filter() {
+                String filter = MainScreen.this.searchField.getText();
+                MainScreen.this.filterContactListModel((ContactListModel<Contact>)
+                        MainScreen.this.contactList.getModel(), filter);
             }
         });
     }
@@ -260,7 +264,6 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         this.exportContactBtn.setToolTipText(LanguageManager.getInstance().getValue("tooltip_export_contact_btn"));
 
         this.searchField.setToolTipText(LanguageManager.getInstance().getValue("tooltip_search_field"));
-        this.searchBtn.setText(LanguageManager.getInstance().getValue("text_search_btn"));
     }
 
     /**
@@ -294,6 +297,27 @@ public class MainScreen implements Screen, ChangeLanguageListener {
                 this.listModel.removeElementAt(index);
                 this.addContactToList(contact);
             }
+        }
+    }
+
+    public void filterContactListModel(ContactListModel<Contact> model, String filter) {
+        try {
+            Contact[] storedContacts = SqlContactDatabase.getInstance().readAllContacts();
+
+            for (Contact contact : storedContacts) {
+                if (!contact.getSurname().startsWith(filter)) {
+                    if (model.contains(contact)) {
+                        model.removeElement(contact);
+                    }
+                } else {
+                    if (!model.contains(contact)) {
+                        model.addElement(contact);
+                    }
+                }
+            }
+        } catch (SQLException exc) {
+            JOptionPane.showMessageDialog(null, exc,
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -388,11 +412,11 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         bodyPanel.setBackground(new Color(-12291125));
         rootPanel.add(bodyPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         listPanel = new JPanel();
-        listPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), 0, 0));
+        listPanel.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), 0, 0));
         listPanel.setBackground(new Color(-14667942));
         bodyPanel.add(listPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         listScrollPane = new JScrollPane();
-        listPanel.add(listScrollPane, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(200, -1), new Dimension(250, -1), null, 0, false));
+        listPanel.add(listScrollPane, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, new Dimension(200, -1), new Dimension(250, -1), null, 0, false));
         contactList = new JList();
         contactList.setBackground(new Color(-12291125));
         Font contactListFont = this.$$$getFont$$$(null, Font.BOLD, -1, contactList.getFont());
@@ -404,10 +428,7 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         contactList.setSelectionMode(0);
         listScrollPane.setViewportView(contactList);
         searchField = new JTextField();
-        listPanel.add(searchField, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        searchBtn = new JButton();
-        searchBtn.setText("");
-        listPanel.add(searchBtn, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        listPanel.add(searchField, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 30), new Dimension(150, -1), null, 0, false));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(1, 1, new Insets(20, 20, 20, 20), 20, 20));
         panel1.setBackground(new Color(-12291125));
