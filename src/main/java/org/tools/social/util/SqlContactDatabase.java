@@ -31,26 +31,37 @@ public class SqlContactDatabase implements AutoCloseable
         DATABASE_DRIVER = "org.sqlite.JDBC";
     }
 
-    private SqlContactDatabase(File file, String table) throws ClassNotFoundException, SQLException
+    private SqlContactDatabase(File dbPath, String tableName)
+            throws ClassNotFoundException, SQLException, FileNotFoundException
     {
-        this.DATABASE_PATH = file.getAbsolutePath();
-        this.TABLE_NAME = table;
+        if(!dbPath.exists() || dbPath.isDirectory())
+        {
+            throw new FileNotFoundException(dbPath.getAbsolutePath());
+        }
+        else
+        {
+            this.DATABASE_PATH = dbPath.getAbsolutePath();
+        }
 
         Class.forName(SqlContactDatabase.DATABASE_DRIVER);
         this.connection = DriverManager.getConnection("jdbc:sqlite:" + this.DATABASE_PATH);
+
+        if(false == this.tableExist(tableName))
+        {
+            throw new SQLException("Table not found in database");
+        }
+        else
+        {
+            this.TABLE_NAME = tableName;
+        }
     }
 
-    public static boolean initialize(File file, String table)
+    public static boolean initialize(File dbPath, String tableName)
             throws ClassNotFoundException, SQLException, FileNotFoundException
     {
         if(null == SqlContactDatabase.instance)
         {
-            if(!file.exists() || file.isDirectory())
-            {
-                throw new FileNotFoundException(file.getAbsolutePath());
-            }
-
-            SqlContactDatabase.instance = new SqlContactDatabase(file, table);
+            SqlContactDatabase.instance = new SqlContactDatabase(dbPath, tableName);
 
             return true;
         }
@@ -76,6 +87,45 @@ public class SqlContactDatabase implements AutoCloseable
     }
 
     /**
+     * This method checks if the database connection is open. It is highly
+     * recommended to call this method before using any methods.
+     *
+     * @throws SQLException
+     */
+
+    public boolean isOpen() throws SQLException
+    {
+        return !this.connection.isClosed();
+    }
+
+    /**
+     * This method checks if a given table exists in database.
+     *
+     * @throws SQLException
+     */
+
+    public boolean tableExist(String tableName) throws SQLException
+    {
+        boolean exists = false;
+
+        try(ResultSet resultSet = this.connection.getMetaData().getTables(null,
+                null, tableName, null))
+        {
+            while(resultSet.next())
+            {
+                String name = resultSet.getString("TABLE_NAME");
+
+                if(null != name && name.equals(tableName))
+                {
+                    exists = true;
+                    break;
+                }
+            }
+        }
+        return exists;
+    }
+
+    /**
      * This method reads all stored contacts from database.
      *
      * @return An array of read contacts.
@@ -95,12 +145,12 @@ public class SqlContactDatabase implements AutoCloseable
             {
                 Contact contact = new Contact();
 
-                contact.setPrename(result.getString("PRENAME"));
-                contact.setSurname(result.getString("SURNAME"));
-                contact.setEmailAddress(result.getString("EMAIL"));
-                contact.setPhoneNumber(result.getString("PHONE"));
-                contact.setHomepage(result.getString("HOMEPAGE"));
-                contact.setLocation(result.getString("LOCATION"));
+                contact.setPrename(result.getString(ContactDatabaseFormat.PRENAME_ID.toString()));
+                contact.setSurname(result.getString(ContactDatabaseFormat.SURNAME_ID.toString()));
+                contact.setEmailAddress(result.getString(ContactDatabaseFormat.EMAIL_ID.toString()));
+                contact.setPhoneNumber(result.getString(ContactDatabaseFormat.PHONE_ID.toString()));
+                contact.setHomepage(result.getString(ContactDatabaseFormat.HOMEPAGE_ID.toString()));
+                contact.setLocation(result.getString(ContactDatabaseFormat.LOCATION_ID.toString()));
 
                 contactList.add(contact);
             }
@@ -120,15 +170,11 @@ public class SqlContactDatabase implements AutoCloseable
      * @throws SQLException
      */
 
-    public void writeContact(Contact contact) throws FileNotFoundException, SQLException
+    public void writeContact(Contact contact) throws SQLException
     {
         try(Statement statement = this.connection.createStatement())
         {
-            String sql = "INSERT INTO " + this.TABLE_NAME + " VALUES ('" + contact.getPrename() +
-                    "', '" + contact.getSurname() + "', '" + contact.getEmailAddress() +
-                    "', '" + contact.getPhoneNumber() + "', '" + contact.getHomepage() +
-                    "', '" + contact.getLocation() + "');";
-
+            String sql = "INSERT INTO " + this.TABLE_NAME + " VALUES (" + contact.toStringList() + ");";
             statement.executeUpdate(sql);
         }
     }
@@ -141,12 +187,13 @@ public class SqlContactDatabase implements AutoCloseable
      * @throws SQLException
      */
 
-    public void deleteContact(Contact contact) throws FileNotFoundException, SQLException
+    public void deleteContact(Contact contact) throws SQLException
     {
         try(Statement statement = this.connection.createStatement())
         {
-            String sql = "DELETE FROM " + this.TABLE_NAME + " WHERE PRENAME = '" + contact.getPrename() +
-                    "' AND SURNAME = '" + contact.getSurname() + "';";
+            String sql = "DELETE FROM " + this.TABLE_NAME + " WHERE " +
+                    ContactDatabaseFormat.PRENAME_ID.toString() + " = '" + contact.getPrename() +
+                    "' AND " + ContactDatabaseFormat.SURNAME_ID.toString() + " = '" + contact.getSurname() + "';";
 
             statement.executeUpdate(sql);
         }
@@ -160,14 +207,17 @@ public class SqlContactDatabase implements AutoCloseable
      * @throws SQLException
      */
 
-    public void updateContact(Contact contact) throws FileNotFoundException, SQLException
+    public void updateContact(Contact contact) throws SQLException
     {
         try(Statement statement = this.connection.createStatement())
         {
-            String sql = "UPDATE " + this.TABLE_NAME + " SET EMAIL='" + contact.getEmailAddress() +
-                    "', PHONE='" + contact.getPhoneNumber() + "', HOMEPAGE='" + contact.getHomepage() +
-                    "', LOCATION='" + contact.getLocation() + "' WHERE PRENAME='" + contact.getPrename() +
-                    "' AND SURNAME='" + contact.getSurname() + "';";
+            String sql = "UPDATE " + this.TABLE_NAME + " SET " +
+                    ContactDatabaseFormat.EMAIL_ID.toString() + "='" + contact.getEmailAddress() + "', " +
+                    ContactDatabaseFormat.PHONE_ID.toString() + "='" + contact.getPhoneNumber() + "', " +
+                    ContactDatabaseFormat.HOMEPAGE_ID.toString() + "='" + contact.getHomepage() + "', " +
+                    ContactDatabaseFormat.LOCATION_ID.toString() + "='" + contact.getLocation() +
+                    "' WHERE " + ContactDatabaseFormat.PRENAME_ID.toString() + "='" + contact.getPrename() +
+                    "' AND " + ContactDatabaseFormat.SURNAME_ID.toString() + "='" + contact.getSurname() + "';";
 
             statement.executeUpdate(sql);
         }

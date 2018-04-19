@@ -168,8 +168,14 @@ public class Contact implements Comparable <Contact>
 
     @Override public String toString()
     {
-        return "Contact {" + prename + ", " + surname + ", " + emailAddress +
-                ", " + phoneNumber + ", " + homepage + ", " + location + "}";
+        return "Contact {" + this.prename + ", " + this.surname + ", " + this.emailAddress +
+                ", " + this.phoneNumber + ", " + this.homepage + ", " + this.location + "}";
+    }
+
+    public String toStringList()
+    {
+        return "'" + this.prename + "', '" + this.surname + "', '" + this.emailAddress +
+                "', '" + this.phoneNumber + "', '" + this.homepage + "', '" + this.location + "'";
     }
 
     public static Comparator <Contact> COMPARE_BY_PRENAME = new Comparator<Contact>()

@@ -620,7 +620,7 @@ public class MainScreen implements Screen, ChangeLanguageListener {
                 try {
                     SqlContactDatabase.getInstance().deleteContact(contact);
                     listModel.removeElementAt(index);
-                } catch (FileNotFoundException | SQLException exc) {
+                } catch (SQLException exc) {
                     JOptionPane.showMessageDialog(null, exc,
                             "Error", JOptionPane.ERROR_MESSAGE);
                 }

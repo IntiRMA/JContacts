@@ -189,7 +189,7 @@ public class Application extends JFrame
                     SqlContactDatabase.getInstance().writeContact(contact);
                     Application.this.mainScreen.addContactToList(contact);
                 }
-                catch(FileNotFoundException | SQLException exc)
+                catch(SQLException exc)
                 {
                     JOptionPane.showMessageDialog(null, exc,
                             "Error", JOptionPane.ERROR_MESSAGE);
@@ -219,7 +219,7 @@ public class Application extends JFrame
                     SqlContactDatabase.getInstance().updateContact(contact);
                     Application.this.mainScreen.replaceContactAtList(contact);
                 }
-                catch(FileNotFoundException | SQLException exc)
+                catch(SQLException exc)
                 {
                     JOptionPane.showMessageDialog(null, exc,
                             "Error", JOptionPane.ERROR_MESSAGE);
