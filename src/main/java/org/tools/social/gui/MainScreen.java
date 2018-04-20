@@ -23,13 +23,11 @@ import org.tools.social.util.*;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,7 +67,7 @@ public class MainScreen implements Screen, ChangeLanguageListener {
     private JButton editScreenBtn;
     private JButton exportContactBtn;
     private JLabel titleSloganLabel;
-    private JButton infoBtn;
+    private JButton settingsDialogBtn;
     private JButton socialGitHubBtn;
     private JTextField searchField;
     private JButton searchBtn;
@@ -123,10 +121,10 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         this.editScreenBtn.setIcon(IconManager.ICON_EDIT_CONTACT.getIcon());
         this.editScreenBtn.addActionListener(new SwitchEditScreenActionListener());
 
-        this.infoBtn.setBorderPainted(false);
-        this.infoBtn.setMargin(new Insets(0, 0, 0, 0));
-        this.infoBtn.setIcon(IconManager.ICON_SETTINGS.getIcon());
-        this.infoBtn.addActionListener(new OpenSettingsListener());
+        this.settingsDialogBtn.setBorderPainted(false);
+        this.settingsDialogBtn.setMargin(new Insets(0, 0, 0, 0));
+        this.settingsDialogBtn.setIcon(IconManager.ICON_SETTINGS.getIcon());
+        this.settingsDialogBtn.addActionListener(new OpenSettingsListener());
     }
 
     private void setupListUI() {
@@ -258,7 +256,7 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         this.currentScreenBtn.setToolTipText(LanguageManager.getInstance().getValue("tooltip_current_screen_btn"));
         this.appendScreenBtn.setToolTipText(LanguageManager.getInstance().getValue("tooltip_append_screen_btn"));
         this.editScreenBtn.setToolTipText(LanguageManager.getInstance().getValue("tooltip_edit_screen_btn"));
-        this.infoBtn.setToolTipText(LanguageManager.getInstance().getValue("tooltip_info_btn"));
+        this.settingsDialogBtn.setToolTipText(LanguageManager.getInstance().getValue("tooltip_info_btn"));
 
         this.deleteContactBtn.setToolTipText(LanguageManager.getInstance().getValue("tooltip_delete_contact_btn"));
         this.exportContactBtn.setToolTipText(LanguageManager.getInstance().getValue("tooltip_export_contact_btn"));
@@ -400,11 +398,11 @@ public class MainScreen implements Screen, ChangeLanguageListener {
         editScreenBtn.setText("");
         editScreenBtn.setToolTipText("");
         sideBarPanel.add(editScreenBtn, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(-1, 50), null, 0, false));
-        infoBtn = new JButton();
-        infoBtn.setBackground(new Color(-16772558));
-        infoBtn.setText("");
-        infoBtn.setToolTipText("");
-        sideBarPanel.add(infoBtn, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(-1, 50), null, 0, false));
+        settingsDialogBtn = new JButton();
+        settingsDialogBtn.setBackground(new Color(-16772558));
+        settingsDialogBtn.setText("");
+        settingsDialogBtn.setToolTipText("");
+        sideBarPanel.add(settingsDialogBtn, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(-1, 50), null, 0, false));
         final Spacer spacer1 = new Spacer();
         sideBarPanel.add(spacer1, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         bodyPanel = new JPanel();

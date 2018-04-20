@@ -83,7 +83,7 @@ public class LanguageManager
             UIManager.put("OptionPane.okButtonText", "OK");
             UIManager.put("OptionPane.yesButtonText", "Ja");
         }
-        else if(true == Locale.ENGLISH.equals(locale))
+        else
         {
             UIManager.put("OptionPane.cancelButtonText", "Cancel");
             UIManager.put("OptionPane.noButtonText", "No");

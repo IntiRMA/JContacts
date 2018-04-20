@@ -55,7 +55,7 @@
               <toolTipText value=""/>
             </properties>
           </component>
-          <component id="a76de" class="javax.swing.JButton" binding="infoBtn">
+          <component id="a76de" class="javax.swing.JButton" binding="settingsDialogBtn">
             <constraints>
               <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="-1" height="50"/>
