@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.tools.social</groupId>
+    <groupId>org.X1C1B.software</groupId>
     <artifactId>JContacts</artifactId>
     <version>1.0</version>
 
@@ -114,7 +114,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.tools.social.Application</mainClass>
+                            <mainClass>org.X1C1B.software.JContacts.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
