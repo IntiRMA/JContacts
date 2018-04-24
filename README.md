@@ -19,7 +19,7 @@ application is still in developing and should be used carefully.
 
 In the current state, this application contains all basic features for managing contacts. The single contacts will stored in a local standalone database. Moreover, it's possible to store, edit, export and delete single contacts. In future versions there will be a search function, to extract single contacts from database by tags. Also, there will be multi language support, at the moment for english, french and german.
 
-| ![Preview Image](https://github.com/0x1C1B/JContacts/blob/master/doc/img/preview.png) | 
+| ![Preview Image](https://raw.githubusercontent.com/0x1C1B/JContacts/doc/img/preview.png) | 
 |:--:| 
 | *Preview image of the graphical user interface* |
 
