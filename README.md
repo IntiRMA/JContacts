@@ -5,6 +5,8 @@
 
 - [Overview](#overview)
 - [Installation](#installation)
+  - [Debian](#debian)
+  - [Windows](#windows)
 - [Usage](#usage)
 - [License](#license)
   - [Forbidden](#forbidden)
@@ -24,11 +26,39 @@ In the current state, this application contains all basic features for managing 
 
 ## Installation
 
-There is no need to install external dependencies, just extract the downloaded zip file to the installation directory.
+There is no need to install external dependencies, just extract the downloaded zip/tar.gz file to the installation directory, maybe additional software is requiered to extract the downloaded zip file. The directory in which you extract the downloaded file will also be the installation directory.
+
+### Debian
 
 ```sh
 $ sudo apt-get install unzip
 $ unzip JContacts-<version>.zip -d /path/to/installation/directory
+```
+
+A further option is to create a desktop entry to launch the jar directly from menu:
+
+```
+[Desktop Entry]
+  Name=JContacts
+  Exec=java -jar '/path/to/installation/directory/JContacts-<version>.jar' 
+  Icon=your/path/to/icon
+  Terminal=false
+  Type=Application
+```
+
+Finally store the created desktop entry at `~/.local/share/applications/`.
+
+### Windows
+
+Maybe you need additional software to extract the downloaded archiv on this system. If you need additional software, here are two possible applications:
+
+- [7-Zip](https://www.7-zip.org/) - Provides a graphical user interface
+- [UnZip](http://gnuwin32.sourceforge.net/packages/unzip.htm) - Mostly command-line based
+
+However, extract the downloaded file to the installation directory. Equivalent to Debian systems it is possible to create a desktop shortcut:
+
+```cmd
+$ mklink "path/to/shortcut/directory/myShortcut" "/path/to/installation/directory/JContacts-<version>.jar"
 ```
 
 ## Usage
@@ -39,6 +69,8 @@ application.
 ```sh
 $ java -jar JContacts-<version>.jar
 ```
+
+Alternate if your system supports it, you can open/execute the jar file from file manager. If you have multiple options to open the jar file from file manager, it's important to open it with the JRE.
 
 ## License
 
