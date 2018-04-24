@@ -1,10 +1,9 @@
 # JContacts
-> A simple Java based solution for the organization of contacts
+> [Official GitHub Page](https://0x1c1b.github.io/JContacts/) - A simple Java based solution for the organization of contacts
 
 ## Table of Contents
 
 - [Overview](#overview)
-- [Download](#download)
 - [Installation](#installation)
 - [Usage](#usage)
 - [License](#license)
@@ -22,10 +21,6 @@ In the current state, this application contains all basic features for managing 
 | ![Preview Image](https://github.com/0x1C1B/JContacts/blob/master/doc/img/preview.png) | 
 |:--:| 
 | *Preview image of application* |
-
-## Download
-
-You can download the latest version [here](https://github.com/0x1C1B/JContacts/releases).
 
 ## Installation
 
