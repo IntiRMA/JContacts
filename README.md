@@ -39,11 +39,11 @@ A further option is to create a desktop entry to launch the jar directly from me
 
 ```
 [Desktop Entry]
-  Name=JContacts
-  Exec=java -jar '/path/to/installation/directory/JContacts-<version>.jar' 
-  Icon=your/path/to/icon
-  Terminal=false
-  Type=Application
+Name=JContacts
+Exec=java -jar '/path/to/installation/directory/JContacts-<version>.jar' 
+Icon=your/path/to/icon
+Terminal=false
+Type=Application
 ```
 
 Finally store the created desktop entry at `~/.local/share/applications/`.
