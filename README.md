@@ -21,7 +21,7 @@ In the current state, this application contains all basic features for managing 
 
 | ![Preview Image](https://github.com/0x1C1B/JContacts/blob/master/doc/img/preview.png) | 
 |:--:| 
-| *Preview image of the graphical user interface* |
+| *Preview image of application* |
 
 ## Download
 
