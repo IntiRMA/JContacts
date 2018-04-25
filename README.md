@@ -1,10 +1,13 @@
 # JContacts
-> [Official GitHub Page](https://0x1c1b.github.io/JContacts/) - A simple Java based solution for the organization of contacts
+
+> A simple Java based solution for the organization of contacts
 
 ## Table of Contents
 
 - [Overview](#overview)
+  - [Features](#features)
 - [Installation](#installation)
+  - [Dependencies](#dependencies)
   - [Debian](#debian)
   - [Windows](#windows)
 - [Usage](#usage)
@@ -14,19 +17,37 @@
 
 ## Overview
 
-Originally this was an educational project. It was the intention of this project to unite many different components,
+Originally this was an educational project. The intention of this project is to unite many different components,
 such as databases, to achieve the greatest possible studying success within one single application. Please note that this
-application is still in developing and should be used carefully.
+application is still in developing and should be used carefully. You can also visit the [Official Website](https://0x1c1b.github.io/JContacts/).
 
-In the current state, this application contains all basic features for managing contacts. The single contacts will stored in a local standalone database. Moreover, it's possible to store, edit, export and delete single contacts. In future versions there will be a search function, to extract single contacts from database by tags. Also, there will be multi language support, at the moment for english, french and german.
+In the current state, this application contains all basic features for managing contacts. The single contacts will stored in a local standalone database. Moreover, general features, like editing or exporting single contacts, are already implemented. In future versions there will be full multi language support. At the moment for english, french and german.
 
 | ![Preview Image](https://github.com/0x1C1B/JContacts/raw/master/doc/img/preview.png) | 
 |:--:| 
 | *Preview image of application* |
 
+### Features
+
+- Multi language support (partial: English, German, French)
+- Export/Import contacts to/from XML format
+- Start default browser or mail client directly from application
+- All general editing options (store, save, edit, ...)
+- All contacts are stored in a local standalone database
+
 ## Installation
 
-There is no need to install external dependencies, just extract the downloaded zip/tar.gz file to the installation directory, maybe additional software is requiered to extract the downloaded zip file. The directory in which you extract the downloaded file will also be the installation directory.
+Just extract the downloaded zip/tar.gz file to the installation directory. Maybe additional software is requiered to extract the downloaded zip/tar.gz file. The directory in which you extract the downloaded file will also be the installation directory.
+
+### Dependencies
+
+To run this application later, it's required to install the Java Virtual Maschine. If you already have installed the JVM you can skip this step. Otherwise you should install the JVM now. You can download the **JRE** package, which contains the needed JVM, from the official [Oracle Website](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
+
+On Debian-like systems you can alternate install the OpenJDK instead of the official Oracle version:
+
+```sh
+$ sudo apt-get install openjdk-<version>-jre
+```
 
 ### Debian
 
@@ -35,18 +56,18 @@ $ sudo apt-get install unzip
 $ unzip JContacts-<version>.zip -d /path/to/installation/directory
 ```
 
-A further option is to create a desktop entry to launch the jar directly from menu:
+A further option is creating a desktop entry to launch the jar directly from menu:
 
 ```
 [Desktop Entry]
 Name=JContacts
 Exec=java -jar '/path/to/installation/directory/JContacts-<version>.jar' 
-Icon=your/path/to/icon
+Icon=/path/to/application/icon
 Terminal=false
 Type=Application
 ```
 
-Finally store the created desktop entry at `~/.local/share/applications/`.
+Finally store the created desktop entry at `~/.local/share/applications/` as `JContacts.desktop`.
 
 ### Windows
 
@@ -58,7 +79,7 @@ Maybe you need additional software to extract the downloaded archiv on this syst
 However, extract the downloaded file to the installation directory. Equivalent to Debian systems it is possible to create a desktop shortcut:
 
 ```cmd
-$ mklink "path/to/shortcut/directory/myShortcut" "/path/to/installation/directory/JContacts-<version>.jar"
+$ mklink "C:\path\to\shortcut\directory\myShortcut" "C:\path\to\installation\directory\JContacts-<version>.jar"
 ```
 
 ## Usage
@@ -70,7 +91,7 @@ application.
 $ java -jar JContacts-<version>.jar
 ```
 
-Alternate if your system supports it, you can open/execute the jar file from file manager. If you have multiple options to open the jar file from file manager, it's important to open it with the JRE.
+Alternate if your system supports it, you can open/execute the jar file from file manager or menu. If you have multiple options to open the jar file, you should ensure that you open it with the JVM.
 
 ## License
 
